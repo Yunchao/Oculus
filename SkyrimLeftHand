@@ -1,0 +1,42 @@
+scriptId = ''--add later
+scriptTitle = "Skyrim Left Hand"
+scriptDetailsUrl = "" --fix when submitting to Myo Market
+
+function onForegroundWindowChange(app, title)
+    return platform == "Windows" and app == "Skyrim" --fix app name
+end
+
+function activeAppName()
+    return "Skyrim Left Hand"
+end
+
+--make arm detection work
+--if myo.getArm ~= "left" then
+--    myo.debug("put the myo on your other hand")
+--end
+
+--function onActiveChange(isActive)
+--    myo.debug("onActiveChange")
+--end
+
+function onPoseEdge(pose, edge)
+    -- If myo is used, keep myo unlocked
+    if edge == "on" then
+	myo.unlock("hold")
+    end
+
+    -- Control spellcast/menu buttons
+    if pose == "fingersSpread" and edge == "on" then
+	myo.mouse("right", "down") --replace "right" with spellcast button
+	myo.notifyUserAction() --makes myo vibrate while spell is active. Subject to change
+    elseif pose == "fingersSpread" and edge == "off" then
+	myo.mouse("right", "up") --replace "right" with spellcast button
+    elseif pose == "fist" and edge == "on" then
+	myo.keyboard("m", "press") --replace "m" with menu button
+    elseif pose == "fist" and edge == "off" then
+	myo.keyboard("m", "press") --replace "m" with menu button
+    end
+end
+
+--function onPeriodic()
+--end
